@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>Laffka - {{item.name}}</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/normalize.css') }}">
+    </head>
+    <body>
+        {% include "header.html"%}
+        <h2>{{item.name}}</h2>
+        <pre>{{item.desc}}</pre><hr>
+        <h2>Buy:
+            <a href="/order/{{index}}/1">1 pcs</a> |
+            <a href="/order/{{index}}/2">2 pcs</a> |
+            <a href="/order/{{index}}/3">3 pcs</a> |
+            <a href="/order/{{index}}/4">4 pcs</a> |
+            <a href="/order/{{index}}/5">5 pcs</a>
+        </h2>
+        Price(€/kpl):{{item.price}}<br>
+        Price(btc/kpl):{{(item.price/rate) | round(4,'floor')}}<br>
+    </body>
