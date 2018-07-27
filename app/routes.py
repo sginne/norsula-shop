@@ -76,4 +76,7 @@ def present_payment(btc_address):
     bitcoin=Bitcoin()
     database=Database()
     order=database.fetch_one_order(btc_address)
-    return  render_template('pay.html',order=order,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
+    if order is None:
+        return 'Error'
+    else:
+        return  render_template('pay.html',order=order,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
