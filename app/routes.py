@@ -57,7 +57,7 @@ def pay_for_order ():
     #address=re.sub('[^A-Za-z0-9:_-]','',address)
     address_salt=address+configuration.Configuration.salt
     address_salt=address_salt.encode()
-    address_hash=hashlib.sha224(address_salt).hexdigest()
+    address_hash=hashlib.sha224(address_salt).hexdigest()[0:9]
     address=address.replace('\n', '|')
     address = re.sub('[^A-Za-z0-9:_-|]', '', address)
     item_index=data['index']
@@ -65,11 +65,15 @@ def pay_for_order ():
     item_index=re.sub('[^0-9]', '', item_index)
     item_amount=re.sub('[^0-9]', '', item_amount)
     item1=database.fetch_one_item(item_index)
-    order_price=round(item1.price/bitcoin.btc_eur,6)
+    order_price=round(item1.price/bitcoin.btc_eur*float(item_amount),6)
     #print (order_price)
     order=Bitcoin.order(item_index,address,address_hash,item_amount,order_price)
     #print (order.order_index)
     return redirect("/pay/"+str(order.btc_address))
-@app.route('/pay/btc_address')
-def present_payment(order_index):
-    order_index=re.sub('[^A-Za-z0-9]','',order_index)
+@app.route('/pay/<btc_address>')
+def present_payment(btc_address):
+    btc_address=re.sub('[^A-Za-z0-9]','',btc_address)
+    bitcoin=Bitcoin()
+    database=Database()
+    order=database.fetch_one_order(btc_address)
+    return  render_template('pay.html',order=order,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
