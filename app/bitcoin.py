@@ -8,17 +8,24 @@ class Bitcoin:
 
     def __init__(self):
         self.get_rate()
+    def update_txs(self):
+        database=app.db.Database()
+        txes=database.get_orders()
+        for tx in txes:
+            r=requests.get(configuration.Configuration.tx_url+tx.btc_address)
+            cash=int(r.content)/(100000000)
+            if tx.paid!=cash:
+                database.update_paid(tx.btc_address,cash)
+                #print (tx.btc_address)
+        #print ('here to update txes')
     def update_btc_rate(self):
-        r = requests.get(configuration.Configuration.btc_rate)
+        r = requests.get(configuration.Configuration.btc_rate_url)
         data = r.json()
         self.btc_eur = (data['EUR'])
         self.db_update()
     def db_update(self):
         database = app.db.Database()
-        #print(self.btc_eur)
-        database.db_cursor.execute('UPDATE btc SET rate='+str(self.btc_eur)+'  WHERE rate >0')
-        database.db_connection.commit()
-        database.db_connection.close()
+        database.update_btc_rate(self.btc_eur)
     def get_rate(self):
         database=app.db.Database()
         database.db_cursor.execute('SELECT * FROM btc')
