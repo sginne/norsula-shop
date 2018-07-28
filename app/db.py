@@ -53,7 +53,8 @@ class Database:
             return_row.desc = item[4]
             return return_row
     def make_order(self,item_index,address,address_salt,item_amount,order_price):
-        self.db_cursor.execute("""INSERT INTO `orders`(`item_index`, `address`,  `address_salt`,`item_amount`,`order_price`,`paid`)        VALUES(?,?,?,?,?,0)""",(item_index,address,address_salt,item_amount,order_price));
+        import time
+        self.db_cursor.execute("""INSERT INTO `orders`(`item_index`, `address`,  `address_salt`,`item_amount`,`order_price`,`paid`,`date`)        VALUES(?,?,?,?,?,0,?)""",(item_index,address,address_salt,item_amount,order_price,int(time.time())));
         self.db_connection.commit()
         return self.db_cursor.lastrowid
     def update_order(self,order_index,wif_key,btc_address,private_key):

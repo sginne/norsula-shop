@@ -8,7 +8,7 @@ class Bitcoin:
 
     def __init__(self):
         self.get_rate()
-    def update(self):
+    def update_btc_rate(self):
         r = requests.get(configuration.Configuration.btc_rate)
         data = r.json()
         self.btc_eur = (data['EUR'])
@@ -47,12 +47,5 @@ class Bitcoin:
             self.btc_address=child_wallet.to_address()
             self.private_key=child_wallet.get_private_key_hex()
             database.update_order(self.order_index,self.wif_key,self.btc_address,self.private_key)
-    class made_order:
-        address_salt=''
-        wif_key=''
-        btc_address=''
-        paid=False
-        order_index=-1
-        def __init__(self,order_index):
-            self.order_index=order_index
+
 
