@@ -8,20 +8,33 @@ from app import configuration
 
 database=app.db.Database()
 bitcoin_object=app.bitcoin.Bitcoin()
+
+#cron jobs described later
 def update_rate():
-    #app.bitcoin.__init__
-    #print (bitcoin_object.btc_eur)
-    bitcoin_object.update()
+    bitcoin_object.update_btc_rate()
+def update_orders():
+    bitcoin_object.update_txs()
 
 scheduler =BackgroundScheduler()
 scheduler.start()
+
+#update_rate
 scheduler.add_job(
     func=update_rate,
-    trigger=IntervalTrigger(seconds=60),
+    trigger=IntervalTrigger(seconds=app.configuration.Configuration.update_rate_sec),
     id='update btc rate',
-    name='Name',
+    name='update btc rate',
     replace_existing=True
 )
+#update_orders
+scheduler.add_job(
+    func=update_orders,
+    trigger=IntervalTrigger(seconds=app.configuration.Configuration.update_tx_sec),
+    id='update_orders',
+    name='update orders',
+    replace_existing=True
+)
+
 atexit.register(lambda : scheduler.shutdown())
 
 app =Flask(__name__)
