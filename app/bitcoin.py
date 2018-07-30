@@ -1,6 +1,6 @@
 import json
 import requests
-import electrum
+#import electrum
 import app.db
 from app import configuration
 class Bitcoin:
