@@ -10,7 +10,9 @@ class Bitcoin:
         self.get_rate()
     def update_txs(self):
         database=app.db.Database()
-        txes=database.get_orders()
+        import time
+        cut_off = int(time.time()) - configuration.Configuration.check_cutoff
+        txes=database.get_orders(cut_off)
         for tx in txes:
             r=requests.get(configuration.Configuration.tx_url+tx.btc_address)
             cash=int(r.content)/(100000000)

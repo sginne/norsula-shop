@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template,redirect
+from flask import render_template,redirect,abort
 from app.db import Database
 from app.bitcoin import Bitcoin
 from flask import request
@@ -80,3 +80,15 @@ def present_payment(btc_address):
         return 'Error'
     else:
         return  render_template('pay.html',order=order,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
+@app.route('/o/<key1>/<key2>')
+def list_paid_orders(key1,key2):
+    if key1==configuration.Configuration.adminkey1:
+        if key2==configuration.Configuration.adminkey2:
+            database=Database()
+            orders2=database.get_orders(0)
+            orders=[]
+            for order in orders2:
+                if order.paid!=0:
+                    orders.append(order)
+            return render_template('admin-orders.html',header=configuration.Configuration.header,orders=orders)
+    abort(404)

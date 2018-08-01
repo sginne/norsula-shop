@@ -20,7 +20,7 @@ class Database:
             self.paid=row[4]
             self.address_salt=row[5]
             self.item_index=row[6]
-            self.item_ammount=row[7]
+            self.item_amount=row[7]
             self.btc_address=row[8]
             self.order_price=row[9]
 
@@ -43,11 +43,11 @@ class Database:
         self.db_cursor.execute('UPDATE orders SET paid='+str(cash)+' WHERE btc_address="'+btc_address+'"')
         self.db_connection.commit()
 
-    def get_orders(self):
-        import time
+    def get_orders(self,cut_off):
+        #import time
         #print ('here we are')
         #self.db_connection.set_trace_callback(print)
-        cut_off=int(time.time())-configuration.Configuration.check_cutoff
+        #cut_off=int(time.time())-configuration.Configuration.check_cutoff
         self.db_cursor.execute('SELECT * FROM orders WHERE date>'+str(cut_off))
         orders=[]
         for order_row in self.db_cursor.fetchall():

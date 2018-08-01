@@ -1,4 +1,6 @@
 class Configuration():
+    adminkey1='123456'
+    adminkey2='234567'
     database_url = './db/main'
     wtf_csrf = True
     salt = 'salt'
