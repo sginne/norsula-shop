@@ -4,6 +4,7 @@ from app.db import Database
 from app.bitcoin import Bitcoin
 from flask import request
 from app import configuration
+from flask import session
 #from app.bitcoin import Bitcoin
 import re
 import hashlib
@@ -25,7 +26,7 @@ def show_item(index):
     item1=database.fetch_one_item(index)
 
     if item1 is None:
-        return 'Error'
+        abort(404)
     else:
         return  render_template('item.html',index=index,item=item1,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
 @app.route('/order/<index>/<amount>')
@@ -92,3 +93,64 @@ def list_paid_orders(key1,key2):
                     orders.append(order)
             return render_template('admin-orders.html',header=configuration.Configuration.header,orders=orders)
     abort(404)
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+    # Here we use a class of some kind to represent and validate our
+    # client-side form data. For example, WTForms is a library that will
+    # handle this for us, and we use a custom LoginForm to validate.
+    from flask_wtf import FlaskForm
+    from wtforms import StringField, PasswordField, SubmitField
+
+    class LoginForm(FlaskForm):
+        username = StringField('Username')
+        password = PasswordField('Password')
+        submit = SubmitField('Submit')
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        import hashlib
+        user=(request.form.get('username'))
+        password=(request.form.get('password'))
+        user=user.encode('utf-8')
+        password=password.encode('utf-8')
+        user=hashlib.sha224(user).hexdigest()
+        password=hashlib.sha224(password).hexdigest()
+        if((user==configuration.Configuration.user) and (password==configuration.Configuration.password)):
+            session['adminkey']=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()
+            #print (session)
+            return redirect ('/c')
+    return render_template('login.html', form=form)
+@app.route('/logout')
+def logout():
+    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    session['adminkey']=''
+    return redirect('/')
+    abort(404)
+@app.route('/c')
+def console():
+    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    database=Database()
+    orders=database.get_orders(0)
+    orders_interest=[]
+    for order in orders:
+        if (order.paid>0) or (order.note is not None):
+            item=database.fetch_one_item(order.item_index)
+            order.item_name=item.name
+
+            orders_interest.append(order)
+    orders=orders_interest
+    return render_template('admin.html',orders=orders)
+@app.route('/admin_order', methods=['POST'])
+def admin_order():
+    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    data = request.form
+    database=Database()
+    if 'note' not in data:
+        database.delete_note(data['order_index'])
+    else:
+        database.create_note(data['order_index'],data['note'])
+    return redirect('/c')

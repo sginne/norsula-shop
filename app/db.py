@@ -9,9 +9,11 @@ class Database:
         paid=0
         address_salt=''
         item_index=0
-        item_ammount=0
+        item_amount=0
         btc_address=''
         order_price=0
+        order_date=0
+        item_name=''
         def __init__(self,row):
             self.index=row[0]
             self.address=row[1]
@@ -23,6 +25,9 @@ class Database:
             self.item_amount=row[7]
             self.btc_address=row[8]
             self.order_price=row[9]
+            self.order_date=row[10]
+            self.note=row[11]
+            self.item_name=''
 
     class row: #item row
         name=''
@@ -36,6 +41,15 @@ class Database:
     def update_btc_rate(self,rate):
         #self.db_connection.set_trace_callback(print)
         self.db_cursor.execute('UPDATE btc SET rate='+str(rate)+'  WHERE rate >0')
+        self.db_connection.commit()
+
+    def create_note(self,order_index,note):
+        self.db_connection.set_trace_callback(print)
+        self.db_cursor.execute('UPDATE orders SET `note`="'+note+'"  WHERE `index`='+order_index)
+        self.db_connection.commit()
+    def delete_note(self,order_index):
+        #self.db_connection.set_trace_callback(print)
+        self.db_cursor.execute('UPDATE orders SET `note`=null  WHERE `index`='+order_index)
         self.db_connection.commit()
 
     def update_paid(self,btc_address,cash):
