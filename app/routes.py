@@ -145,7 +145,9 @@ def console():
     return render_template('admin.html',orders=orders)
 @app.route('/admin_order', methods=['POST'])
 def admin_order():
-    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+    if 'adminkey' not in session:
+        abort(404):
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
         abort(404)
     data = request.form
     database=Database()
