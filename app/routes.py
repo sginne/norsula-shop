@@ -120,7 +120,7 @@ def login():
             session['adminkey']=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()
             #print (session)
             return redirect ('/c')
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form,header=configuration.Configuration.header)
 @app.route('/logout')
 def logout():
     if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
@@ -142,7 +142,7 @@ def console():
 
             orders_interest.append(order)
     orders=orders_interest
-    return render_template('admin.html',orders=orders)
+    return render_template('admin.html',orders=orders,header=configuration.Configuration.header)
 @app.route('/admin_order', methods=['POST'])
 def admin_order():
     if 'adminkey' not in session:
