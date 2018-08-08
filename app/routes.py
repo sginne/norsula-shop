@@ -36,6 +36,7 @@ def order_item(index,amount):
     database=Database()
     bitcoin=Bitcoin()
     item1=database.fetch_one_item(index)
+    #print(item1.pcs)
     if item1 is None:
         return 'Error'
     else:
@@ -81,18 +82,6 @@ def present_payment(btc_address):
         return 'Error'
     else:
         return  render_template('pay.html',order=order,rate=bitcoin.btc_eur,header=configuration.Configuration.header)
-@app.route('/o/<key1>/<key2>')
-def list_paid_orders(key1,key2):
-    if key1==configuration.Configuration.adminkey1:
-        if key2==configuration.Configuration.adminkey2:
-            database=Database()
-            orders2=database.get_orders(0)
-            orders=[]
-            for order in orders2:
-                if order.paid!=0:
-                    orders.append(order)
-            return render_template('admin-orders.html',header=configuration.Configuration.header,orders=orders)
-    abort(404)
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -123,15 +112,20 @@ def login():
     return render_template('login.html', form=form,header=configuration.Configuration.header)
 @app.route('/logout')
 def logout():
-    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+    if 'adminkey' not in session:
+        abort(404)
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
         abort(404)
     session['adminkey']=''
     return redirect('/')
     abort(404)
 @app.route('/c')
 def console():
-    if (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+    if 'adminkey' not in session:
         abort(404)
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+
     database=Database()
     orders=database.get_orders(0)
     orders_interest=[]
@@ -142,11 +136,14 @@ def console():
 
             orders_interest.append(order)
     orders=orders_interest
-    return render_template('admin.html',orders=orders,header=configuration.Configuration.header)
+    items=database.get_items()
+    for item in items:
+        pass
+    return render_template('admin.html',orders=orders,items=items,header=configuration.Configuration.header)
 @app.route('/admin_order', methods=['POST'])
 def admin_order():
     if 'adminkey' not in session:
-        abort(404):
+        abort(404)
     elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
         abort(404)
     data = request.form
@@ -155,4 +152,41 @@ def admin_order():
         database.delete_note(data['order_index'])
     else:
         database.create_note(data['order_index'],data['note'])
+
+    return redirect('/c')
+@app.route('/admin_item', methods=['POST'])
+def admin_item():
+    if 'adminkey' not in session:
+        abort(404)
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    data = request.form
+
+    item_name=data['name']
+    item_price=data['price']
+    item_avail=data['avail']
+    item_description=data['description']
+    item_index=data['index']
+    database=Database()
+    database.update_item(item_index,item_price,item_name,item_avail,item_description)
+    return redirect('/c')
+@app.route('/delete_item/<item>')
+def delete_item(item):
+    if 'adminkey' not in session:
+        abort(404)
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    database=Database()
+    database.delete_item(item)
+    print(item)
+    return redirect('/c')
+@app.route('/add_item')
+def add_item():
+    print('what')
+    if 'adminkey' not in session:
+        abort(404)
+    elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
+        abort(404)
+    database=Database()
+    database.add_item()
     return redirect('/c')

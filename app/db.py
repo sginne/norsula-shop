@@ -14,6 +14,7 @@ class Database:
         order_price=0
         order_date=0
         item_name=''
+        pcs=[]
         def __init__(self,row):
             self.index=row[0]
             self.address=row[1]
@@ -31,9 +32,20 @@ class Database:
 
     class row: #item row
         name=''
+        index=-1
         price=''
         avail=''
         desc=''
+        pcs=[]
+        def __init__(self,row):
+            self.name=row[0]
+            self.index=row[1]
+            self.price=row[2]
+            self.avail=row[3]
+            self.desc=row[4]
+            self.pcs = [int(pc) for pc in row[5].split(',')]
+            print (self.pcs)
+
     def __init__(self): #init database
         self.db_connection= sqlite3.connect(configuration.Configuration.database_url)
         self.db_cursor=self.db_connection.cursor()
@@ -58,16 +70,17 @@ class Database:
         self.db_connection.commit()
 
     def get_orders(self,cut_off):
-        #import time
-        #print ('here we are')
-        #self.db_connection.set_trace_callback(print)
-        #cut_off=int(time.time())-configuration.Configuration.check_cutoff
         self.db_cursor.execute('SELECT * FROM orders WHERE date>'+str(cut_off))
         orders=[]
         for order_row in self.db_cursor.fetchall():
-            #print(order_row)
             orders.append(self.order(order_row))
         return orders
+    def get_items(self):
+        self.db_cursor.execute('SELECT * FROM items')
+        items=[]
+        for item_row in self.db_cursor.fetchall():
+            items.append(self.row(item_row))
+        return items
 
 
     def fetch_one_order(self,btc_address): #return one order in form of ''order'' class
@@ -84,11 +97,7 @@ class Database:
         if item is None:
             return None
         else:
-            return_row=self.row()
-            return_row.name = item[0]
-            return_row.price = item[2]
-            return_row.avail = item[3]
-            return_row.desc = item[4]
+            return_row=self.row(item)
             return return_row
     def make_order(self,item_index,address,address_salt,item_amount,order_price): #pairedd with update_order, making new order
         import time
@@ -98,4 +107,13 @@ class Database:
     def update_order(self,order_index,wif_key,btc_address,private_key): #paired with make_order, making new order
         #self.db_connection.set_trace_callback(print)
         self.db_cursor.execute("UPDATE orders SET wif=?,  private_key=?, btc_address=? WHERE `index`=?;",(wif_key,private_key,btc_address,order_index))
+        self.db_connection.commit()
+    def update_item(self,item_index,item_price,item_name,item_avail,item_desc):
+        self.db_cursor.execute("UPDATE items SET name=?,  price=?, visible=?, description=? WHERE `ind`=?;", (item_name, item_price, item_avail,item_desc, item_index))
+        self.db_connection.commit()
+    def delete_item(self,item_index):
+        self.db_cursor.execute("DELETE FROM `items` WHERE `ind`="+item_index)
+        self.db_connection.commit()
+    def add_item(self):
+        self.db_cursor.execute("INSERT INTO `items`(`name`,`price`,`visible`,`description`,`pcs`) VALUES ('Empty item','0',0,'Change description and visibility','1,2,3,4,5');")
         self.db_connection.commit()
