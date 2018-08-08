@@ -7,7 +7,7 @@ class Configuration():
     salt = 'salt'
     btc_rate_url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
     btc_master_key = 'belt arrange uphold soul dinosaur meat pave version heavy used spatial skin'
-    shop_name="Laffkashop"
+    shop_name="Hydrofinil"
     shop_url="laffka6wwduoexvb.onion"
     btc_net = "Test"  # Test for testnet, otherwise MainNet
     update_rate_sec = 60  # checking btc rate every ... seconds
