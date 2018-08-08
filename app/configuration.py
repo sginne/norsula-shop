@@ -1,19 +1,19 @@
 class Configuration():
-    user='123'
-    password='234'
+    user='faceless'
+    password='1234qwerasdfzxcv'
 
-    database_url = './db/main'
+    database_url = './db/hydro.db'
     wtf_csrf = True
     salt = 'salt'
     btc_rate_url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
     btc_master_key = 'belt arrange uphold soul dinosaur meat pave version heavy used spatial skin'
     shop_name="Hydrofinil"
-    shop_url="laffka6wwduoexvb.onion"
-    btc_net = "Test"  # Test for testnet, otherwise MainNet
+    shop_url="http://hydrai4gff7sohjw.onion/"
+    btc_net = "Main"  # Test for testnet, otherwise MainNet
     update_rate_sec = 60  # checking btc rate every ... seconds
     update_tx_sec = 300  # checking TX's every ... seconds.
     check_cutoff=60*60*24*30 #30 days in seconds
-    secret_key='supersecretkey'
+    secret_key='doddiofoddioe'
 
 
     #dont modify below
