@@ -6,8 +6,8 @@ class Configuration():
     wtf_csrf = True
     salt = 'salt'
     btc_rate_url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
-    btc_master_key = 'belt arrange uphold soul dinosaur meat pave version heavy used spatial skin'
-    shop_name="Hydrofinil"
+    btc_master_key = 'culture bright tiger bone tonight multiply connect engage useless festival despair load'
+    shop_name="Hydrafinil"
     shop_url="http://hydrai4gff7sohjw.onion/"
     btc_net = "Main"  # Test for testnet, otherwise MainNet
     update_rate_sec = 60  # checking btc rate every ... seconds
