@@ -137,8 +137,11 @@ def console():
             orders_interest.append(order)
     orders=orders_interest
     items=database.get_items()
+    required_items=[]
     for item in items:
-        pass
+        item.pcs=",".join(str(x) for x in item.pcs)
+        required_items.append(item)
+    items=required_items
     return render_template('admin.html',orders=orders,items=items,header=configuration.Configuration.header)
 @app.route('/admin_order', methods=['POST'])
 def admin_order():
@@ -167,8 +170,9 @@ def admin_item():
     item_avail=data['avail']
     item_description=data['description']
     item_index=data['index']
+    item_pcs=data['pcs']
     database=Database()
-    database.update_item(item_index,item_price,item_name,item_avail,item_description)
+    database.update_item(item_index,item_price,item_name,item_avail,item_description,item_pcs)
     return redirect('/c')
 @app.route('/delete_item/<item>')
 def delete_item(item):
@@ -178,11 +182,9 @@ def delete_item(item):
         abort(404)
     database=Database()
     database.delete_item(item)
-    print(item)
     return redirect('/c')
 @app.route('/add_item')
 def add_item():
-    print('what')
     if 'adminkey' not in session:
         abort(404)
     elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):

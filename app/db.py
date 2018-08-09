@@ -44,7 +44,7 @@ class Database:
             self.avail=row[3]
             self.desc=row[4]
             self.pcs = [int(pc) for pc in row[5].split(',')]
-            print (self.pcs)
+
 
     def __init__(self): #init database
         self.db_connection= sqlite3.connect(configuration.Configuration.database_url)
@@ -108,8 +108,9 @@ class Database:
         #self.db_connection.set_trace_callback(print)
         self.db_cursor.execute("UPDATE orders SET wif=?,  private_key=?, btc_address=? WHERE `index`=?;",(wif_key,private_key,btc_address,order_index))
         self.db_connection.commit()
-    def update_item(self,item_index,item_price,item_name,item_avail,item_desc):
-        self.db_cursor.execute("UPDATE items SET name=?,  price=?, visible=?, description=? WHERE `ind`=?;", (item_name, item_price, item_avail,item_desc, item_index))
+    def update_item(self,item_index,item_price,item_name,item_avail,item_desc,item_pcs):
+        #self.db_connection.set_trace_callback(print)
+        self.db_cursor.execute("UPDATE items SET name=?,  price=?, visible=?, description=?, pcs=? WHERE `ind`=?;", (item_name, item_price, item_avail,item_desc,item_pcs,  item_index))
         self.db_connection.commit()
     def delete_item(self,item_index):
         self.db_cursor.execute("DELETE FROM `items` WHERE `ind`="+item_index)
