@@ -5,6 +5,7 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app import configuration
+from waitress import serve
 
 database=app.db.Database()
 bitcoin_object=app.bitcoin.Bitcoin()
@@ -41,5 +42,6 @@ app =Flask(__name__)
 app.config['WTF_CSRF_ENABLED']=configuration.Configuration.wtf_csrf
 app.config['SECRET_KEY']=configuration.Configuration.secret_key
 
+from app import routes
 from app import routes
 
