@@ -9,7 +9,7 @@
         <pre>{{item.desc}}</pre><hr>
         <h2>Buy:
             {% for pc in item.pcs %}
-            <a href="/order/{{index}}/1">({{pc}}pc={{(item.price/rate*pc) | round(4,'floor')}}btc)</a>
+            <a href="/order/{{index}}/{{pc}}">({{pc}}pc={{(item.price/rate*pc) | round(4,'floor')}}btc)</a>
             {% endfor %}
 
         </h2>

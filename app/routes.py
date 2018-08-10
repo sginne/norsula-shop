@@ -122,9 +122,9 @@ def logout():
 @app.route('/c')
 def console():
     if 'adminkey' not in session:
-        abort(404)
+        return redirect('/login')
     elif (session['adminkey']!=hashlib.sha224(configuration.Configuration.secret_key.encode('utf-8')).hexdigest()):
-        abort(404)
+        return redirect('/login')
 
     database=Database()
     orders=database.get_orders(0)
