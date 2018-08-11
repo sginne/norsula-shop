@@ -3,7 +3,7 @@ from app import app
 from waitress import serve
 from app.configuration import Configuration
 
-#Switch between waitress and development flask
+#Switch between waitress and development flask, if debugging/port not set, serving development on 5000
 try:
     if Configuration.debugging==True:
         app.run(host='127.0.0.1',port=Configuration.port)

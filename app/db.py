@@ -51,7 +51,11 @@ class Database:
         self.db_cursor=self.db_connection.cursor()
 
     def update_btc_rate(self,rate):
-        #self.db_connection.set_trace_callback(print)
+        '''
+        Updates rate in database
+        :param rate:
+        :return:
+        '''
         self.db_cursor.execute('UPDATE btc SET rate='+str(rate)+'  WHERE rate >0')
         self.db_connection.commit()
 
