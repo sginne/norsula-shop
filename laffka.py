@@ -2,6 +2,8 @@
 from app import app
 from waitress import serve
 from app.configuration import Configuration
+if Configuration.btc_master_key=='':
+    quit('Please edit app/configuration.py')
 
 #Switch between waitress and development flask, if debugging/port not set, serving development on 5000
 try:
