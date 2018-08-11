@@ -1,10 +1,14 @@
-from setuptools import setup
+from setuptools import setup,find_packages
+#import versioneer
 
 setup(
-    name='Laffka',
-    version='1.00',
-    long_description='Laffkastop developed with tor in mind.',
-    packages=['laffka'],
+    author_email = "e.tuidhana@yandex.ru",
+    description = "Laffka torshop",
+    license = "BSD",
+    name='laffka',
+    version='1.01',
+    long_description='Laffkashop developed with tor in mind.',
+    packages=find_packages(exclude='__pycharm__'),
     include_package_data=True,
     zip_safe=False,
     install_requires=['Flask','requests','Flask-APScheduler','Flask-WTF','bitmerchant','Flask-Login','Flask-Session','waitress']
