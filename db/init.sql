@@ -21,9 +21,21 @@ CREATE TABLE "items" (
 	`description`	TEXT,
 	`pcs`	TEXT
 );
-INSERT INTO `items` VALUES ('Project hat',1,1.0,-1,'Donations are pretty much welcome . 1KsxhDfYbF7Lg47wqeTgcZQgTVS18mzZrd','1,5,10,50,100');
+INSERT INTO `items` VALUES ('Project hat',1,1.0,-1,'-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Donations are pretty much welcome.
+1KsxhDfYbF7Lg47wqeTgcZQgTVS18mzZrd
+Laffka
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iF4EAREIAAYFAltvCL0ACgkQ2+cre6vr1tXROgD8DA+koJytuInHBb7EQVmOj37v
+V5Y83aQrTm7F+UaLqrkBAJt5A48GnAWDYRfPm8dTIZpgEnPN0cOCf/mPRjQusqBe
+=7yQ9
+-----END PGP SIGNATURE-----','1,5,10,50,100');
 CREATE TABLE `btc` (
 	`rate`	REAL
 );
-INSERT INTO `btc` VALUES (5354.86);
+INSERT INTO `btc` VALUES (5358.13);
 COMMIT;

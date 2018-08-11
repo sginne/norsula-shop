@@ -28,7 +28,7 @@ class Bitcoin:
         Updates btc exchange rate to self.object and call on update
         :return:
         '''
-        r = requests.get(configuration.Configuration.btc_rate_url)
+        r = requests.get(''https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'')
         data = r.json()
         self.btc_eur = (data['EUR'])
         self.db_update()
