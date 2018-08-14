@@ -13,7 +13,7 @@ class Configuration():
     database_url = './db/main'  #database location
     wtf_csrf = True
 
-    #debuggint stuff
+    #debugging stuff
     btc_net = "Main"  # Test for testnet, otherwise MainNet
     debugging = True
     port=5678 #Port to serve for debugging or no. if not set, 5000 applied
@@ -29,6 +29,6 @@ class Configuration():
     #secret_key = binascii.hexlify(os.urandom(24))
     header=shop_name+" - "+shop_url
     if btc_net=="Test":
-        tx_url="https://testnet.blockchain.info/q/addressbalance/"
+        tx_url="https://testnet.blockchain.info/q/addressbalance/" #if Configuration.btc_net Test then testnet, mainnet
     else:
-        tx_url="https://blockchain.info/q/addressbalance/"
+        tx_url="https://blockchain.info/q/addressbalance/" #otherwise

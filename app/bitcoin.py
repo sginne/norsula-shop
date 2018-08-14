@@ -73,5 +73,6 @@ class Bitcoin:
             self.btc_address=child_wallet.to_address()
             self.private_key=child_wallet.get_private_key_hex()
             database.update_order(self.order_index,self.wif_key,self.btc_address,self.private_key)
+            #update and make order can be joined
 
 

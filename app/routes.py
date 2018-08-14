@@ -5,7 +5,6 @@ from app.bitcoin import Bitcoin
 from flask import request
 from app import configuration
 from flask import session
-#from app.bitcoin import Bitcoin
 import re
 import hashlib
 
