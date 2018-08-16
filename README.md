@@ -1,4 +1,4 @@
-#Laffka
+# Laffka
 >Opensource torshop application written in Python 3, and powered by Flask.
 
 Application was developed with hidden service in mind after realisation, that customers cant withdraw money from [Valhalla market](valhallaxmn3fydu.onion), only vendors.
