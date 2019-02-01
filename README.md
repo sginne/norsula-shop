@@ -2,6 +2,10 @@
 >Sell everything, your keys are your properties, your freedom is .onion land.
 >Py3 opensource application specialized for hidden onion. service providing.
 >Application implements bitcoin checkouts and simple private key sweeping
+
+[My Awesome Wiki](../../wiki)
+
+
 1. [ What If? ](#whatif)
 2. [ How to? ](#howto)
 
