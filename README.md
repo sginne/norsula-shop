@@ -3,7 +3,7 @@
 >Py3 opensource application specialized for hidden onion. service providing.
 >Application implements bitcoin checkouts and simple private key sweeping
 
-[My Awesome Wiki](../../wiki)
+[Readme wiki](../../wiki)
 
 
 1. [ What If? ](#whatif)
